@@ -1,8 +1,9 @@
 const express = require("express");
+const cors = require('cors')
 const app = express();
 
 app.use(express.json());
-
+app.use(cors())
 const auth = require("./routes/auth");
 app.use("/auth", auth);
 
@@ -16,6 +17,10 @@ app.use("/attendance", attendance);
 const port = 3000;
 app.get("/", (req, res) => {
   res.status(200).send("Idiot server Running Successfully Get Lost ....");
+});
+
+app.get("/test", (req, res) => {
+  res.status(200).send("Route working");
 });
 
 app.listen(port, (req, res) => {
