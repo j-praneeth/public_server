@@ -19,10 +19,6 @@ app.get("/", (req, res) => {
   res.status(200).send("Idiot server Running Successfully Get Lost ....");
 });
 
-app.get("/test", (req, res) => {
-  res.status(200).send("Route working");
-});
-
 app.listen(port, (req, res) => {
   console.log(`Idiot server is running at ${port}`);
 });
