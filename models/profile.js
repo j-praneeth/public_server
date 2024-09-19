@@ -9,23 +9,23 @@ const pool = require("./db");
  * @param {number} batch_id - The ID of the batch the user belongs to.
  * @returns {Promise<Object>} - The created user profile.
  */
-const createUser = async (user_id, name, password, batch_id) => {
+const createUser = async (email, name, password, batch_id) => {
   const query =
-    "INSERT INTO profile (user_id , name, password, batch_id) VALUES ( $1, $2, $3, $4)RETURNING user_id, name, batch_id;";
-  const values = [user_id, name, password, batch_id];
+    "INSERT INTO profile (email , name, password, batch_id) VALUES ( $1, $2, $3, $4)RETURNING email, name, batch_id;";
+  const values = [email, name, password, batch_id];
   const { rows } = await pool.query(query, values);
   return rows[0];
 };
 
 /*
- * Retrieve a user profile by user_id.
- * @param {number} user_id - The ID of the user.
+ * Retrieve a user profile by email.
+ * @param {number} email - The ID of the user.
  * @returns {Promise<Object>} - The user profile.
  */
-const getUserById = async (user_id) => {
+const getUserById = async (email) => {
   const query =
-    "SELECT user_id, name,password, batch_id FROM profile WHERE user_id = $1;";
-  const values = [user_id];
+    "SELECT email, name,password, batch_id FROM profile WHERE email = $1;";
+  const values = [email];
   const { rows } = await pool.query(query, values);
   return rows[0];
 };
@@ -39,7 +39,7 @@ const getUserById = async (user_id) => {
  */
 const getUsersByBatchId = async (batch_id) => {
   const query = `
-    SELECT user_id, name, batch_id
+    SELECT email, name, batch_id
     FROM profile
     WHERE batch_id = $1;
   `;
@@ -67,33 +67,33 @@ const getUserByName = async (name) => {
 
 /*
  * Update a user's password.
- * @param {number} user_id - The ID of the user.
+ * @param {number} email - The ID of the user.
  * @param {string} newPassword - The new password (plaintext).
  * @returns {Promise<Object>} - The updated user profile.
  */
-const updateUserPassword = async (user_id, newPassword) => {
+const updateUserPassword = async (email, newPassword) => {
   const query = `
     UPDATE profile
     SET password = $2
-    WHERE user_id = $1
-    RETURNING user_id, name, batch_id;
+    WHERE email = $1
+    RETURNING email, name, batch_id;
   `;
-  const values = [user_id, newPassword];
+  const values = [email, newPassword];
   const { rows } = await pool.query(query, values);
   return rows[0];
 };
 
 /*
- * Delete a user profile by user_id.
- * @param {number} user_id - The ID of the user.
+ * Delete a user profile by email.
+ * @param {number} email - The ID of the user.
  * @returns {Promise<void>}
  */
-const deleteUser = async (user_id) => {
+const deleteUser = async (email) => {
   const query = `
     DELETE FROM profile
-    WHERE user_id = $1;
+    WHERE email = $1;
   `;
-  const values = [user_id];
+  const values = [email];
   await pool.query(query, values);
 };
 

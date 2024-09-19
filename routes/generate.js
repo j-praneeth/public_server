@@ -7,15 +7,15 @@ require("dotenv").config();
 
 // Generate JWT Token
 router.post("/", async (req, res) => {
-  const { user_id, batch_id } = req.body;
+  const { email, batch_id } = req.body;
 
-  // Validate user_id (you can add your own validation logic here)
-  if (!user_id) {
+  // Validate email (you can add your own validation logic here)
+  if (!email) {
     return res.status(400).json({ message: "User ID is required" });
   }
 
   // Generate token
-  const token = jwt.sign({ user_id }, process.env.JWT_SECRET, {
+  const token = jwt.sign({ email }, process.env.JWT_SECRET, {
     expiresIn: "1h",
   });
 
@@ -24,7 +24,7 @@ router.post("/", async (req, res) => {
   res.json({ record });
 });
 
-// verify user_id (you can add your own validation logic here)
+// verify email (you can add your own validation logic here)
 
 // Middleware to verify JWT Token
 const authenticateToken = (req, res, next) => {

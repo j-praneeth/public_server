@@ -11,16 +11,16 @@ const router = express.Router();
  */
 router.post("/register", async (req, res) => {
   try {
-    const { user_id, name, password, batch_id } = req.body;
+    const { email, name, password, batch_id } = req.body;
 
     // Check if user already exists
-    const existingUser = await getUserById(user_id);
+    const existingUser = await getUserById(email);
     if (existingUser) {
       return res.status(400).json({ message: "User already exists" });
     }
 
     // Create user
-    const user = await createUser(user_id, name, password, batch_id);
+    const user = await createUser(email, name, password, batch_id);
     res.status(201).json({ user });
   } catch (error) {
     console.error("Error registering user:", error);
@@ -33,10 +33,10 @@ router.post("/register", async (req, res) => {
  */
 router.get("/login", async (req, res) => {
   try {
-    const { user_id, password } = req.body;
+    const { email, password } = req.body;
 
     // Retrieve user
-    const user = await getUserById(user_id);
+    const user = await getUserById(email);
     console.log(user);
     if (!user) {
       return res.status(401).json({ message: "Invalid credentials" });
